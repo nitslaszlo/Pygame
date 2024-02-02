@@ -11,16 +11,29 @@ from laser import Laser
 
 class Game:
     def __init__(self):
+        self.screen_width: int = 600
+        self.screen_height: int = 600
+        self.screen: pygame.Surface = pygame.display.set_mode(
+            (self.screen_width, self.screen_height)
+        )
+        self.clock = pygame.time.Clock()
         # Player setup
-        player_sprite = Player((screen_width / 2, screen_height), screen_width, 5)
-        self.player = pygame.sprite.GroupSingle(player_sprite)
+
+        self.player_sprite: Player = Player(
+            (self.screen_width // 2, self.screen_height), self.screen_width, 5
+        )
+        self.player = pygame.sprite.GroupSingle(self.player_sprite)
 
         # health and score setup
         self.lives = 3
-        self.live_surf = pygame.image.load("graphics/player.png").convert_alpha()
-        self.live_x_start_pos = screen_width - (self.live_surf.get_size()[0] * 2 + 20)
-        self.score = 0
-        self.font = pygame.font.Font("font/Pixeled.ttf", 20)
+        self.live_surf: pygame.Surface = pygame.image.load(
+            "graphics/player.png"
+        ).convert_alpha()
+        self.live_x_start_pos: int = self.screen_width - (
+            self.live_surf.get_size()[0] * 2 + 20
+        )
+        self.score: int = 0
+        self.font: pygame.font.Font = pygame.font.Font("font/Pixeled.ttf", 20)
 
         # Obstacle setup
         self.shape = obstacle.shape
@@ -28,11 +41,11 @@ class Game:
         self.blocks = pygame.sprite.Group()
         self.obstacle_amount = 4
         self.obstacle_x_positions = [
-            num * (screen_width / self.obstacle_amount)
+            num * (self.screen_width / self.obstacle_amount)
             for num in range(self.obstacle_amount)
         ]
         self.create_multiple_obstacles(
-            *self.obstacle_x_positions, x_start=screen_width / 15, y_start=480
+            *self.obstacle_x_positions, x_start=self.screen_width / 15, y_start=480
         )
 
         # Alien setup
@@ -198,7 +211,7 @@ class Game:
 class CRT:
     def __init__(self):
         self.tv = pygame.image.load("graphics/tv.png").convert_alpha()
-        self.tv = pygame.transform.scale(self.tv, (screen_width, screen_height))
+        self.tv = pygame.transform.scale(self.tv, (self.screen_width, self.screen_height))
 
     def create_crt_lines(self):
         line_height = 3
@@ -215,10 +228,7 @@ class CRT:
 
 if __name__ == "__main__":
     pygame.init()
-    screen_width = 600
-    screen_height = 600
-    screen = pygame.display.set_mode((screen_width, screen_height))
-    clock = pygame.time.Clock()
+
     game = Game()
     crt = CRT()
 
